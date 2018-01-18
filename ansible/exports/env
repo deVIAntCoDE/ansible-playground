@@ -1,1 +1,2 @@
 export ANSIBLE_HOST_KEY_CHECKING=False
+# export ANSIBLE_COW_SELECTION=random
