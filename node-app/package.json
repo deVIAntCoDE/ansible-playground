@@ -2,6 +2,7 @@
 	"name": "node-app",
 	"description": "Example Expres nodejs app",
 	"author": "Henry Cleland <hnocleland@gmail.com>",
+	"version": "0.0.1",
 	"dependencies": {
 		"express": "4.16.1"
 	},

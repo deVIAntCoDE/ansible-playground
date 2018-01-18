@@ -1,3 +1,4 @@
+# ansible-playbook ansible/playbooks/nodejs-app-playbook.yml -i ansible/inventory/ansible_hosts --limit "*.2" --extra-vars="node_app_location=/usr/local/opt/node"
 ---
 - hosts: all
   become: yes
@@ -28,5 +29,30 @@
       yum: name=npm state=present enablerepo=epel
 
     - name: Install Forver (to run our Node.js app)
-      npm: name=forver global=yes state=present
+      npm: name=forever global=yes state=present
+
+#
+#
+# COPY LOCAL NODE APP TO SERVER AAND INSTALL
+#
+    - name: Ensure Node.js app folder exists on sever
+      file: path="{{ node_app_location }}" state=directory
+
+    - name: Copy example node app to app server
+      copy: "src=../../node-app dest={{ node_app_location }}"
+
+    - name: Install app dependencis from package.json
+      npm: path={{ node_app_location }}/node-app
+
+#
+#
+# START NODE APP
+    - name: Check list of runnig node.js apps
+      command: forever list
+      register: forever_list
+      changed_when: false
+
+    - name: Start node-app
+      command: "forever start {{ node_app_location }}/node-app/app.js"
+      when: "forever_list.stdout.find(node_app_location + '/node-app/app.js') == -1"
 

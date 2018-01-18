@@ -1,2 +1,3 @@
 .vagrant
 *.retry
+*.node_modules
